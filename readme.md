@@ -12,14 +12,14 @@ Clone this repo using git.
 Before you use it, set the varibles in manager/__main__.py
 
 ```python
-	extentions = ['*.mkv', '*.avi', '*.mp4', '*.srt']
-	m = Manager(pathToDownloads, pathToMovies,pathToShows, extentions)
+extentions = ['*.mkv', '*.avi', '*.mp4', '*.srt']
+m = Manager(pathToDownloads, pathToMovies,pathToShows, extentions)
 ```
 
 When you want to run it simply run this in the folder you did your git clone command:
 
 ```bash
-	$ python manager
+$ python manager
 ```
 
 ## Requirements
