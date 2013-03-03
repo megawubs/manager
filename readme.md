@@ -3,11 +3,11 @@ Manager
 
 This little program uses the awesome guessit library to manage your downloaded files.
 
-# Installation
+## Installation
 
 Clone this repo using git.
 
-# Usage:
+## Usage:
 
 Before you use it, set the varibles in manager/__main__.py
 
