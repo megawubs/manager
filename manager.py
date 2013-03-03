@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 import os
 import glob
-import re
 import shutil
-import grp
 import guessit
-from pprint import pprint
+from logger import Logger
 try:
     from pwd import getpwnam
 except:
@@ -19,12 +17,13 @@ except:
 
 class Manager():
 	"""docstring for Manager"""
-	def __init__(self, user, downloadPath, moviePath, showPath, extentions):
-		self.user = user
+	def __init__(self, downloadPath, moviePath, showPath, extentions):
 		self.downloadPath = downloadPath
 		self.moviePath = moviePath
 		self.showPath = showPath
 		self.extentions = extentions
+		self.l = Logger('Manager', self.downloadPath).logger
+		self.l.info("started")
 
 	def manage(self):
 		self.filesToProces = []
@@ -37,15 +36,15 @@ class Manager():
 	def move(self, fileName):
 		info = self.getInfo(fileName)
 		path = self.getMoveToPath(info)
+		self.l.info("moving %s to %s" % (fileName, path))
 		if path:
 			self.makeDest(path)
-			print "moving %s to %s" % (fileName, path)
 			completePath = os.path.join(path, fileName)
 			if not os.path.isfile(completePath):
 				fileName = os.path.join(self.downloadPath, fileName)
 				shutil.move(fileName, path)
 			else:
-				print "File Already exsists"
+				self.l.info("File Already exsists")
 
 	def getInfo(self, media):
 		return guessit.guess_file_info(media, 'autodetect')
@@ -57,11 +56,13 @@ class Manager():
 			e = self.parseNumber(fileInfo['episodeNumber'])
 			s = fileInfo['season']
 			season = "Season "+str(s)
+			if 'year' in fileInfo:
+				show += " "+ str(fileInfo['year'])
 			s = self.parseNumber(s)
 			path =  os.path.join(show, os.path.join(season, "S"+s+"E"+e))
 			return os.path.join(self.showPath, path)
 		elif fileInfo['type'] == 'movie':
-			print "Movies can't be handled processed now"
+			self.l.info("Movies can't be handled processed now")
 
 	def parseNumber(self, number):
 		if number < 10:
@@ -70,5 +71,5 @@ class Manager():
 
 	def makeDest(self, path):
 		if not os.path.exists(path):
-			os.makedirs(path)
+			os.makedirs(path, 0777)
 		
