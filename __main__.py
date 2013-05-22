@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from manager import Manager
 from pprint import pprint
 

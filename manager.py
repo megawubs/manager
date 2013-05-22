@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import os
 import glob
 import shutil
@@ -37,6 +36,7 @@ class Manager():
 			for _file in glob.glob( os.path.join(self.downloadPath, extention) ):
 				self.fullPath = _file
 				self.fileName = _file[(length+1):]
+				print self.fileName
 				self.move()
 		self.l.info("done")
 
@@ -66,13 +66,18 @@ class Manager():
 	def getMoveToPath(self, fileInfo):
 		if fileInfo['type'] == 'episode':
 			self.l.info("It's an episode")
-			return os.path.join(self.showPath, self.getPathString(fileInfo))
+			return os.path.join(self.showPath, self.getPathStringEpisode(fileInfo))
 		elif fileInfo['type'] == 'movie':
-			self.l.info("Movies can't be handled now")
+			self.l.info("I'ts a movie")
+			return os.path.join(self.moviePath, self.getPathStringMovie(fileInfo))
 		elif fileInfo['type'] == 'episodesubtitle':
-			self.l.info("It's a subtitle")
+			self.l.info("It's a subtitle for a show")
 			self.subtitle = True
-			return os.path.join(self.showPath, self.getPathString(fileInfo))
+			return os.path.join(self.showPath, self.getPathStringEpisode(fileInfo))
+		elif fileInfo['type'] == 'moviesubtitle':
+			self.l.info("I'ts a subtitle for a movie")
+			self.subtitle = True
+			return os.path.join(self.moviePath, self.getPathStringMovie(fileInfo))
 		else:
 			return False
 
@@ -85,7 +90,7 @@ class Manager():
 		if not os.path.exists(path):
 			os.makedirs(path, 0777)
 
-	def getPathString(self, fileInfo):
+	def getPathStringEpisode(self, fileInfo):
 		show = fileInfo['series']
 		e = self.parseNumber(fileInfo['episodeNumber'])
 		s = fileInfo['season']
@@ -94,6 +99,12 @@ class Manager():
 			show += " "+ str(fileInfo['year'])
 		s = self.parseNumber(s)
 		return os.path.join(show, os.path.join(season, "S"+s+"E"+e))
+
+	def getPathStringMovie(self, fileInfo):
+		title = fileInfo['title']
+		if 'year' in fileInfo:
+			title += " "+str(fileInfo['year'])
+		return title
 
 	def renameFile(self):
 		oldPath = os.getcwd()
