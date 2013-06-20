@@ -68,7 +68,6 @@ class Manager():
 			self.l.info("It's an episode")
 			return os.path.join(self.showPath, self.getPathStringEpisode(fileInfo))
 		elif fileInfo['type'] == 'movie':
-			self.l.info("Movies can't be handled processed now")
 			self.l.info("I'ts a movie")
 			return os.path.join(self.moviePath, self.getPathStringMovie(fileInfo))
 		elif fileInfo['type'] == 'episodesubtitle':
