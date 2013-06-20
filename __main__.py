@@ -3,7 +3,7 @@ from manager import Manager
 from pprint import pprint
 
 if __name__ == '__main__':
-	extentions = ['*.mkv', '*.avi', '*.mp4', '*.ts', '*.srt']
+	extentions = ['*.mkv', '*.avi', '*.mp4', '*.m4v', '*.ts', '*.srt']
 	m = Manager('/Volumes/media/Downloads', '/Volumes/media/Videos/','/Volumes/media/Series/', extentions)
 	m.manage()
 
