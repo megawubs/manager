@@ -22,6 +22,7 @@ class Manager():
 		p.add_argument('-v', '--verbose', action='store_true', default=False);
 		args = p.parse_args()
 		self.downloadPath = downloadPath
+		self.nonProcessedPath = os.path.join(self.downloadPath, 'Non-Processed-Files');
 		self.moviePath = moviePath
 		self.showPath = showPath
 		self.extentions = extentions
@@ -36,7 +37,6 @@ class Manager():
 			for _file in glob.glob( os.path.join(self.downloadPath, extention) ):
 				self.fullPath = _file
 				self.fileName = _file[(length+1):]
-				print self.fileName
 				self.move()
 		self.l.info("done")
 
@@ -51,11 +51,14 @@ class Manager():
 			self.makeDest(path)
 			self.l.info("moving %s to %s" % (self.fileName, path))
 			completePath = os.path.join(path, self.fileName)
+			self.fileName = os.path.join(self.downloadPath, self.fileName)
 			if not os.path.isfile(completePath):
-				self.fileName = os.path.join(self.downloadPath, self.fileName)
 				shutil.move(self.fileName, path)
 			else:
 				self.l.info("File Already exsists")
+				self.makeDest(self.nonProcessedPath)
+				self.l.info('moving %s to %s' % (self.fileName, self.nonProcessedPath))
+				shutil.move(self.fileName, self.nonProcessedPath);
 		else:
 			self.l.error("No path to move %s to" % self.fileName)
 
