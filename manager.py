@@ -37,6 +37,19 @@ class Manager():
 			for _file in glob.glob( os.path.join(self.downloadPath, extention) ):
 				self.fullPath = _file
 				self.fileName = _file[(length+1):]
+				for nonsense in ['DDLValley.eu_', 'ReleaseThread_', 'RlsThread_']:
+					if self.fileName.startswith(nonsense):
+						oldPath = os.getcwd()
+						os.chdir(self.downloadPath)
+						newName = self.fileName[len(nonsense):]
+						os.rename(self.fileName, newName)
+						self.fileName = newName
+						if os.path.isfile(newName):
+							os.chdir(oldPath)
+						else:
+							os.chdir(oldPath)
+							self.l.error("Something went wrong while trying to rename %s" % self.fileName)
+				self.l.info('file name is: %s' % self.fileName);
 				self.move()
 		self.l.info("done")
 
