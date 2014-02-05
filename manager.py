@@ -37,7 +37,7 @@ class Manager():
 			for _file in glob.glob( os.path.join(self.downloadPath, extention) ):
 				self.fullPath = _file
 				self.fileName = _file[(length+1):]
-				for nonsense in ['DDLValley.eu_', 'ReleaseThread_', 'RlsThread_']:
+				for nonsense in ['DDLValley.eu_', 'ReleaseThread_', 'RlsThread_', 'RelT_']:
 					if self.fileName.startswith(nonsense):
 						oldPath = os.getcwd()
 						os.chdir(self.downloadPath)
